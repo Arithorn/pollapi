@@ -48,8 +48,6 @@ functions:
       - http:
           path: poll
           method: post
-  # movie:
-  #   handler: handler.movie
 
 #Create Resources - Cloudformation
 resources:
