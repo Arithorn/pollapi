@@ -1,44 +1,70 @@
 service: pollapi-service
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: af-south-1
+  stage: dev
+
+  #Set up Environment
+  environment:
+    POLL_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+
+  #Create IAM Roles
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
+
+#Set up custom DNS
 
 plugins:
   - serverless-domain-manager
 
-
 custom:
   customDomain:
     domainName: poll.smartdevops.net
-    basePath: ''
+    basePath: ""
     stage: ${self:provider.stage}
     createRoute53Record: true
+
+#Define Function Endpoints
 
 functions:
   hello:
     handler: handler.hello
     events:
-     - http:
-         path: hello
-         method: get
+      - http:
+          path: hello
+          method: get
   create_poll:
     handler: handler.create_poll
     events:
-     - http:
-         path: poll
-         method: post
+      - http:
+          path: poll
+          method: post
+  # movie:
+  #   handler: handler.movie
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+#Create Resources - Cloudformation
+resources:
+  Resources:
+    PollDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.POLL_TABLE}
