@@ -48,6 +48,18 @@ functions:
       - http:
           path: poll
           method: post
+  get_poll:
+    handler: handler.get_poll
+    events:
+      - http:
+          path: poll/{id}
+          method: get
+  get_polls:
+    handler: handler.get_polls
+    events:
+      - http:
+          path: poll
+          method: get
 
 #Create Resources - Cloudformation
 resources:

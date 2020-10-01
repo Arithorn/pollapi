@@ -52,3 +52,42 @@ module.exports.create_poll = async (event) => {
     body: JSON.stringify(result),
   };
 };
+module.exports.get_poll = async (event) => {
+  const Query = {
+    TableName: process.env.POLL_TABLE,
+    Key: {
+      id: event.pathParameters.id,
+    },
+  };
+  var result = "";
+  try {
+    result = await dynamoDb.get(Query).promise();
+    console.log(result);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result),
+    };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.get_polls = async (event) => {
+  var result = "";
+  try {
+    result = await dynamoDb
+      .scan({ TableName: process.env.POLL_TABLE })
+      .promise();
+  } catch (err) {
+    console.log(err);
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+  console.log(result);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result.Items),
+  };
+};
