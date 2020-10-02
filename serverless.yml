@@ -19,6 +19,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
       Resource: "*"
 
 #Set up custom DNS
@@ -37,29 +38,35 @@ custom:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: api/poll.hello
     events:
       - http:
           path: hello
           method: get
   create_poll:
-    handler: handler.create_poll
+    handler: api/poll.create_poll
     events:
       - http:
           path: poll
           method: post
   get_poll:
-    handler: handler.get_poll
+    handler: api/poll.get_poll
     events:
       - http:
           path: poll/{id}
           method: get
   get_polls:
-    handler: handler.get_polls
+    handler: api/poll.get_polls
     events:
       - http:
           path: poll
           method: get
+  vote:
+    handler: api/poll.vote
+    events:
+      - http:
+          path: poll/{id}
+          method: patch
 
 #Create Resources - Cloudformation
 resources:
