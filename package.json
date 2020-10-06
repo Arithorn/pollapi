@@ -1,0 +1,26 @@
+{
+  "name": "pollapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.767.0",
+    "package-lock.json": "^1.0.0",
+    "serverless-domain-manager": "^5.0.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arithorn/pollapi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arithorn/pollapi/issues"
+  },
+  "homepage": "https://github.com/Arithorn/pollapi#readme"
+}
